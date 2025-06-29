@@ -1,0 +1,605 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>동영상 촬영 용어 가이드 - AI 동영상 생성을 위한 완벽 참고서</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css">
+    <style>
+         {
+            body { -webkit-print-color-adjust: exact; }
+        }
+        .gradient-bg {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+        .card-hover:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+        }
+        .filter-btn.active {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+    </style>
+</head>
+<body class="bg-gray-50 font-sans">
+    <!-- Header -->
+    <header class="gradient-bg text-white py-8 mb-8">
+        <div class="container mx-auto px-4">
+            <h1 class="text-4xl font-bold text-center mb-4">
+                <i class="fas fa-video mr-3"></i>동영상 촬영 용어 가이드
+            </h1>
+            <p class="text-xl text-center opacity-90 mb-6">AI 동영상 생성을 위한 완벽 참고서</p>
+            
+            <!-- Search Bar -->
+            <div class="max-w-2xl mx-auto">
+                <div class="relative">
+                    <input type="text" id="searchInput" placeholder="용어 검색 (한글 또는 영문)..." 
+                           class="w-full px-6 py-4 text-gray-700 bg-white rounded-full shadow-lg focus:outline-none focus:ring-4 focus:ring-purple-300 transition-all">
+                    <i class="fas fa-search absolute right-6 top-1/2 transform -translate-y-1/2 text-gray-400"></i>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Filter Buttons -->
+    <div class="container mx-auto px-4 mb-8">
+        <div class="flex flex-wrap justify-center gap-3">
+            <button class="filter-btn active bg-gray-200 hover:bg-gray-300 px-4 py-2 rounded-full transition-all" data-category="all">
+                <i class="fas fa-th-large mr-2"></i>전체
+            </button>
+            <button class="filter-btn bg-gray-200 hover:bg-gray-300 px-4 py-2 rounded-full transition-all" data-category="camera-basic">
+                <i class="fas fa-arrows-alt mr-2"></i>카메라 무빙 (기본)
+            </button>
+            <button class="filter-btn bg-gray-200 hover:bg-gray-300 px-4 py-2 rounded-full transition-all" data-category="camera-advanced">
+                <i class="fas fa-magic mr-2"></i>카메라 무빙 (고급)
+            </button>
+            <button class="filter-btn bg-gray-200 hover:bg-gray-300 px-4 py-2 rounded-full transition-all" data-category="angles">
+                <i class="fas fa-eye mr-2"></i>촬영 각도
+            </button>
+            <button class="filter-btn bg-gray-200 hover:bg-gray-300 px-4 py-2 rounded-full transition-all" data-category="shots">
+                <i class="fas fa-expand mr-2"></i>샷 사이즈
+            </button>
+            <button class="filter-btn bg-gray-200 hover:bg-gray-300 px-4 py-2 rounded-full transition-all" data-category="composition">
+                <i class="fas fa-crop mr-2"></i>구도 기법
+            </button>
+            <button class="filter-btn bg-gray-200 hover:bg-gray-300 px-4 py-2 rounded-full transition-all" data-category="lens">
+                <i class="fas fa-camera mr-2"></i>렌즈 효과
+            </button>
+            <button class="filter-btn bg-gray-200 hover:bg-gray-300 px-4 py-2 rounded-full transition-all" data-category="lighting">
+                <i class="fas fa-lightbulb mr-2"></i>조명
+            </button>
+            <button class="filter-btn bg-gray-200 hover:bg-gray-300 px-4 py-2 rounded-full transition-all" data-category="editing">
+                <i class="fas fa-cut mr-2"></i>편집/전환
+            </button>
+            <button class="filter-btn bg-gray-200 hover:bg-gray-300 px-4 py-2 rounded-full transition-all" data-category="effects">
+                <i class="fas fa-star mr-2"></i>특수 효과
+            </button>
+            <button class="filter-btn bg-gray-200 hover:bg-gray-300 px-4 py-2 rounded-full transition-all" data-category="ai-keywords">
+                <i class="fas fa-robot mr-2"></i>AI 키워드
+            </button>
+        </div>
+    </div>
+
+    <!-- Terms Grid -->
+    <div class="container mx-auto px-4 pb-12">
+        <div id="termsContainer" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <!-- Terms will be populated by JavaScript -->
+        </div>
+        
+        <div id="noResults" class="hidden text-center py-12">
+            <i class="fas fa-search text-6xl text-gray-300 mb-4"></i>
+            <h3 class="text-2xl font-semibold text-gray-600 mb-2">검색 결과가 없습니다</h3>
+            <p class="text-gray-500">다른 키워드로 검색해보세요.</p>
+        </div>
+    </div>
+
+    <script>
+        const videoTerms = [
+            // 카메라 무빙 (기본)
+            {
+                korean: "패닝",
+                english: "Pan",
+                category: "camera-basic",
+                description: "카메라를 좌우로 회전시키는 움직임",
+                effect: "넓은 장면을 보여주거나 피사체를 따라 이동할 때 사용",
+                prompt: "smooth pan left, cinematic panning shot"
+            },
+            {
+                korean: "틸팅",
+                english: "Tilt",
+                category: "camera-basic",
+                description: "카메라를 위아래로 회전시키는 움직임",
+                effect: "높이감을 표현하거나 시선의 이동을 보여줄 때 사용",
+                prompt: "slow tilt up, revealing the sky, dramatic tilt down"
+            },
+            {
+                korean: "줌 인/아웃",
+                english: "Zoom In/Out",
+                category: "camera-basic",
+                description: "피사체에 가까워지거나 멀어지는 효과",
+                effect: "감정의 집중이나 확장감을 표현",
+                prompt: "smooth zoom in on face, dramatic zoom out reveal"
+            },
+            {
+                korean: "트래킹",
+                english: "Tracking/Trucking",
+                category: "camera-basic",
+                description: "카메라가 피사체를 따라 이동하는 움직임",
+                effect: "피사체와 함께 움직이며 몰입감 증대",
+                prompt: "tracking shot following character, smooth lateral tracking"
+            },
+            {
+                korean: "돌리 인/아웃",
+                english: "Dolly In/Out",
+                category: "camera-basic",
+                description: "카메라 자체가 앞뒤로 이동하는 움직임",
+                effect: "줌과 달리 원근감의 변화로 더욱 자연스러운 접근",
+                prompt: "cinematic dolly in, slow dolly out reveal"
+            },
+
+            // 카메라 무빙 (고급)
+            {
+                korean: "아크 샷",
+                english: "Arc Shot",
+                category: "camera-advanced",
+                description: "피사체 주위를 반원형으로 돌며 촬영",
+                effect: "피사체를 입체적으로 보여주며 역동적인 느낌 연출",
+                prompt: "arc shot around character, semicircular camera movement"
+            },
+            {
+                korean: "크레인 샷",
+                english: "Crane Shot",
+                category: "camera-advanced",
+                description: "카메라를 높이 올리거나 내리며 촬영",
+                effect: "웅장함과 스케일감을 표현하는 극적인 효과",
+                prompt: "crane shot rising above, high crane shot revealing landscape"
+            },
+            {
+                korean: "핸드헬드",
+                english: "Handheld",
+                category: "camera-advanced",
+                description: "손으로 들고 촬영하는 자연스러운 흔들림",
+                effect: "생동감과 현실감, 긴장감을 표현",
+                prompt: "handheld camera movement, shaky cam realistic feel"
+            },
+            {
+                korean: "스테디캠",
+                english: "Steadicam",
+                category: "camera-advanced",
+                description: "안정화된 부드러운 이동 촬영",
+                effect: "매끄럽고 유려한 카메라 워크로 프로페셔널한 느낌",
+                prompt: "steadicam smooth movement, floating camera shot"
+            },
+            {
+                korean: "휩 팬",
+                english: "Whip Pan/Swish Pan",
+                category: "camera-advanced",
+                description: "매우 빠른 패닝으로 모션 블러 효과 생성",
+                effect: "급격한 시간이나 장소의 전환을 표현",
+                prompt: "fast whip pan transition, motion blur swish pan"
+            },
+            {
+                korean: "서큘러 샷",
+                english: "Circular/Orbital Shot",
+                category: "camera-advanced",
+                description: "피사체 주위를 원형으로 돌며 촬영",
+                effect: "피사체를 중심으로 한 완전한 360도 시점 제공",
+                prompt: "orbital shot around subject, 360 degree circular movement"
+            },
+
+            // 촬영 각도
+            {
+                korean: "아이 레벨",
+                english: "Eye Level",
+                category: "angles",
+                description: "피사체와 같은 높이에서 촬영",
+                effect: "자연스럽고 중립적인 시점 제공",
+                prompt: "eye level shot, neutral camera angle"
+            },
+            {
+                korean: "하이 앵글",
+                english: "High Angle",
+                category: "angles",
+                description: "위에서 아래로 내려다보며 촬영",
+                effect: "피사체를 작고 약하게 보이게 하거나 전체적인 조망 제공",
+                prompt: "high angle shot looking down, overhead perspective"
+            },
+            {
+                korean: "로우 앵글",
+                english: "Low Angle",
+                category: "angles",
+                description: "아래에서 위로 올려다보며 촬영",
+                effect: "피사체를 웅장하고 강력하게 보이게 함",
+                prompt: "low angle shot looking up, heroic low angle"
+            },
+            {
+                korean: "버드 아이 뷰",
+                english: "Bird's Eye View",
+                category: "angles",
+                description: "새의 시선에서 수직으로 내려다보는 각도",
+                effect: "전체적인 구조나 패턴을 보여주는 독특한 시점",
+                prompt: "bird's eye view, straight down aerial shot"
+            },
+            {
+                korean: "더치 앵글",
+                english: "Dutch Angle/Canted Angle",
+                category: "angles",
+                description: "카메라를 기울여 비스듬한 화면 구성",
+                effect: "불안감, 긴장감, 비정상적인 상황을 표현",
+                prompt: "dutch angle tilted camera, canted angle unease"
+            },
+
+            // 샷 사이즈
+            {
+                korean: "익스트림 와이드 샷",
+                english: "Extreme Wide Shot (EWS)",
+                category: "shots",
+                description: "매우 넓은 전경으로 환경 전체를 보여줌",
+                effect: "장소의 스케일과 분위기를 설정",
+                prompt: "extreme wide shot landscape, vast environment shot"
+            },
+            {
+                korean: "와이드 샷",
+                english: "Wide Shot (WS)",
+                category: "shots",
+                description: "넓은 전경, 인물의 전신이 보임",
+                effect: "인물과 환경의 관계를 보여줌",
+                prompt: "wide shot full body, establishing wide shot"
+            },
+            {
+                korean: "미디엄 샷",
+                english: "Medium Shot (MS)",
+                category: "shots",
+                description: "허리 위부터 보이는 샷",
+                effect: "대화 장면이나 일반적인 상황에서 많이 사용",
+                prompt: "medium shot waist up, conversational medium shot"
+            },
+            {
+                korean: "클로즈업",
+                english: "Close-Up (CU)",
+                category: "shots",
+                description: "얼굴 위주의 근접 촬영",
+                effect: "감정 표현과 디테일에 집중",
+                prompt: "close-up face shot, intimate close-up"
+            },
+            {
+                korean: "익스트림 클로즈업",
+                english: "Extreme Close-Up (ECU)",
+                category: "shots",
+                description: "눈, 입 등 얼굴의 일부만 보이는 극도의 근접 촬영",
+                effect: "강렬한 감정이나 중요한 디테일 강조",
+                prompt: "extreme close-up eyes, macro detail shot"
+            },
+
+            // 구도 기법
+            {
+                korean: "3분할 법칙",
+                english: "Rule of Thirds",
+                category: "composition",
+                description: "화면을 9등분하여 교차점에 중요 요소 배치",
+                effect: "시각적으로 안정적이고 균형잡힌 구도",
+                prompt: "rule of thirds composition, balanced framing"
+            },
+            {
+                korean: "리딩 라인",
+                english: "Leading Lines",
+                category: "composition",
+                description: "시선을 유도하는 선의 활용",
+                effect: "시선을 특정 지점으로 자연스럽게 이끔",
+                prompt: "leading lines composition, converging lines"
+            },
+            {
+                korean: "프레이밍",
+                english: "Framing",
+                category: "composition",
+                description: "자연적인 프레임으로 피사체를 둘러싸는 기법",
+                effect: "피사체에 대한 집중도 향상",
+                prompt: "natural framing, frame within frame"
+            },
+            {
+                korean: "대칭",
+                english: "Symmetry",
+                category: "composition",
+                description: "좌우 또는 상하 대칭 구도",
+                effect: "안정감과 질서감을 표현",
+                prompt: "symmetrical composition, perfect symmetry"
+            },
+
+            // 렌즈 효과
+            {
+                korean: "보케",
+                english: "Bokeh",
+                category: "lens",
+                description: "아웃포커스된 배경의 흐린 효과",
+                effect: "피사체를 돋보이게 하고 몽환적인 분위기 연출",
+                prompt: "beautiful bokeh background, shallow depth of field"
+            },
+            {
+                korean: "랙 포커스",
+                english: "Rack Focus/Focus Pull",
+                category: "lens",
+                description: "촬영 중 초점을 앞뒤 피사체 간에 이동",
+                effect: "시선의 이동과 스토리텔링에 활용",
+                prompt: "rack focus transition, focus pull effect"
+            },
+            {
+                korean: "와이드 앵글",
+                english: "Wide Angle",
+                category: "lens",
+                description: "광각 렌즈로 넓은 시야각 확보",
+                effect: "공간감과 원근감을 과장하여 표현",
+                prompt: "wide angle lens, distorted perspective"
+            },
+            {
+                korean: "망원",
+                english: "Telephoto",
+                category: "lens",
+                description: "망원 렌즈로 압축된 원근감",
+                effect: "배경과 전경의 거리감을 압축하여 평면적으로 표현",
+                prompt: "telephoto compression, flattened perspective"
+            },
+
+            // 조명 관련
+            {
+                korean: "골든 아워",
+                english: "Golden Hour/Magic Hour",
+                category: "lighting",
+                description: "일출/일몰 시간대의 부드러운 조명",
+                effect: "따뜻하고 로맨틱한 분위기 연출",
+                prompt: "golden hour lighting, warm sunset glow"
+            },
+            {
+                korean: "백라이트",
+                english: "Backlight/Rim Light",
+                category: "lighting",
+                description: "뒤에서 비추는 조명으로 윤곽선 강조",
+                effect: "실루엣 효과나 윤곽선을 강조하여 입체감 증대",
+                prompt: "backlit silhouette, rim lighting effect"
+            },
+            {
+                korean: "하드 라이트",
+                english: "Hard Light",
+                category: "lighting",
+                description: "강한 그림자를 만드는 직접적인 조명",
+                effect: "드라마틱하고 강렬한 분위기 연출",
+                prompt: "hard lighting dramatic shadows, high contrast"
+            },
+            {
+                korean: "소프트 라이트",
+                english: "Soft Light",
+                category: "lighting",
+                description: "부드러운 그림자를 만드는 확산된 조명",
+                effect: "자연스럽고 편안한 분위기 연출",
+                prompt: "soft diffused lighting, gentle shadows"
+            },
+
+            // 편집/전환 효과
+            {
+                korean: "매치 컷",
+                english: "Match Cut",
+                category: "editing",
+                description: "비슷한 형태나 동작으로 연결되는 편집",
+                effect: "시간이나 공간의 전환을 자연스럽게 연결",
+                prompt: "match cut transition, seamless edit"
+            },
+            {
+                korean: "점프 컷",
+                english: "Jump Cut",
+                category: "editing",
+                description: "시간의 점프를 보여주는 편집",
+                effect: "시간의 경과나 급격한 변화를 표현",
+                prompt: "jump cut time lapse, quick time progression"
+            },
+            {
+                korean: "크로스 컷",
+                english: "Cross Cut/Parallel Editing",
+                category: "editing",
+                description: "두 장면을 번갈아 보여주는 편집",
+                effect: "동시에 일어나는 사건들을 교차하여 긴장감 조성",
+                prompt: "cross cutting between scenes, parallel action"
+            },
+            {
+                korean: "몽타주",
+                english: "Montage",
+                category: "editing",
+                description: "여러 샷을 빠르게 연결하여 시간 경과나 과정 표현",
+                effect: "시간의 압축이나 감정의 고조를 효과적으로 표현",
+                prompt: "montage sequence, rapid cuts progression"
+            },
+
+            // 특수 효과
+            {
+                korean: "타임랩스",
+                english: "Time-lapse",
+                category: "effects",
+                description: "시간을 압축하여 빠르게 보여주는 기법",
+                effect: "긴 시간의 변화를 짧은 시간에 압축하여 표현",
+                prompt: "time-lapse sequence, accelerated time"
+            },
+            {
+                korean: "슬로우 모션",
+                english: "Slow Motion",
+                category: "effects",
+                description: "느린 화면으로 극적 효과",
+                effect: "감정의 강조나 디테일한 동작을 부각",
+                prompt: "slow motion effect, dramatic slow-mo"
+            },
+            {
+                korean: "프리즈 프레임",
+                english: "Freeze Frame",
+                category: "effects",
+                description: "동작을 정지시키는 효과",
+                effect: "특정 순간을 강조하거나 극적인 마무리",
+                prompt: "freeze frame moment, still frame effect"
+            },
+            {
+                korean: "스플릿 스크린",
+                english: "Split Screen",
+                category: "effects",
+                description: "화면을 분할하여 여러 장면 동시 표시",
+                effect: "동시에 일어나는 상황들을 한 화면에서 비교",
+                prompt: "split screen effect, divided frame"
+            },
+
+            // AI 생성 키워드  
+            {
+                korean: "시네마틱",
+                english: "Cinematic",
+                category: "ai-keywords",
+                description: "영화적인 느낌과 품질",
+                effect: "전문적이고 고품질의 영화 같은 영상 연출",
+                prompt: "cinematic shot, movie-like quality"
+            },
+            {
+                korean: "다이나믹",
+                english: "Dynamic",
+                category: "ai-keywords",
+                description: "역동적이고 활력 있는 움직임",
+                effect: "에너지 넘치고 생동감 있는 영상",
+                prompt: "dynamic movement, energetic action"
+            },
+            {
+                korean: "스무스",
+                english: "Smooth",
+                category: "ai-keywords",
+                description: "부드럽고 매끄러운 카메라 워크",
+                effect: "자연스럽고 유려한 화면 전환",
+                prompt: "smooth camera movement, fluid motion"
+            },
+            {
+                korean: "드라마틱",
+                english: "Dramatic",
+                category: "ai-keywords",
+                description: "극적이고 감정적인 효과",
+                effect: "강렬한 감정과 긴장감 조성",
+                prompt: "dramatic lighting, intense atmosphere"
+            },
+            {
+                korean: "어트모스페릭",
+                english: "Atmospheric",
+                category: "ai-keywords",
+                description: "분위기 있고 감성적인 느낌",
+                effect: "특별한 무드와 분위기 연출",
+                prompt: "atmospheric mood, ambient feeling"
+            }
+        ];
+
+        // Category mapping for display
+        const categoryNames = {
+            'camera-basic': '카메라 무빙 (기본)',
+            'camera-advanced': '카메라 무빙 (고급)',
+            'angles': '촬영 각도',
+            'shots': '샷 사이즈',
+            'composition': '구도 기법',
+            'lens': '렌즈 효과',
+            'lighting': '조명',
+            'editing': '편집/전환',
+            'effects': '특수 효과',
+            'ai-keywords': 'AI 키워드'
+        };
+
+        // Category icons
+        const categoryIcons = {
+            'camera-basic': 'fas fa-arrows-alt',
+            'camera-advanced': 'fas fa-magic',
+            'angles': 'fas fa-eye',
+            'shots': 'fas fa-expand',
+            'composition': 'fas fa-crop',
+            'lens': 'fas fa-camera',
+            'lighting': 'fas fa-lightbulb',
+            'editing': 'fas fa-cut',
+            'effects': 'fas fa-star',
+            'ai-keywords': 'fas fa-robot'
+        };
+
+        let currentFilter = 'all';
+        let currentSearch = '';
+
+        function createTermCard(term) {
+            return `
+                <div class="term-card card-hover bg-white rounded-xl shadow-md p-6 transition-all duration-300" data-category="${term.category}">
+                    <div class="flex items-center justify-between mb-4">
+                        <h3 class="text-xl font-bold text-gray-800">${term.korean}</h3>
+                        <span class="bg-purple-100 text-purple-800 px-3 py-1 rounded-full text-sm font-medium">
+                            <i class="${categoryIcons[term.category]} mr-1"></i>
+                            ${categoryNames[term.category]}
+                        </span>
+                    </div>
+                    
+                    <div class="mb-4">
+                        <p class="text-lg font-semibold text-purple-700 mb-2">${term.english}</p>
+                        <p class="text-gray-600 mb-3">${term.description}</p>
+                        <p class="text-sm text-gray-500 italic">💡 ${term.effect}</p>
+                    </div>
+                    
+                    <div class="bg-gray-50 rounded-lg p-4">
+                        <h4 class="font-semibold text-gray-700 mb-2">
+                            <i class="fas fa-robot mr-2 text-purple-600"></i>AI 프롬프트 예시
+                        </h4>
+                        <code class="text-sm text-purple-800 bg-purple-50 px-2 py-1 rounded block">${term.prompt}</code>
+                    </div>
+                </div>
+            `;
+        }
+
+        function filterTerms() {
+            const terms = currentFilter === 'all' 
+                ? videoTerms 
+                : videoTerms.filter(term => term.category === currentFilter);
+            
+            const filteredTerms = currentSearch 
+                ? terms.filter(term => 
+                    term.korean.toLowerCase().includes(currentSearch.toLowerCase()) ||
+                    term.english.toLowerCase().includes(currentSearch.toLowerCase()) ||
+                    term.description.toLowerCase().includes(currentSearch.toLowerCase())
+                  )
+                : terms;
+
+            const container = document.getElementById('termsContainer');
+            const noResults = document.getElementById('noResults');
+
+            if (filteredTerms.length === 0) {
+                container.innerHTML = '';
+                noResults.classList.remove('hidden');
+            } else {
+                container.innerHTML = filteredTerms.map(createTermCard).join('');
+                noResults.classList.add('hidden');
+            }
+        }
+
+        // Event listeners
+        document.addEventListener('DOMContentLoaded', function() {
+            filterTerms();
+
+            // Search functionality
+            document.getElementById('searchInput').addEventListener('input', function(e) {
+                currentSearch = e.target.value;
+                filterTerms();
+            });
+
+            // Filter buttons
+            document.querySelectorAll('.filter-btn').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+                    this.classList.add('active');
+                    currentFilter = this.dataset.category;
+                    filterTerms();
+                });
+            });
+        });
+    </script>
+</body>
+</html>
+    <script id="html_badge_script1">
+        window.__genspark_remove_badge_link = "https://www.genspark.ai/api/html_badge/" +
+            "remove_badge?token=To%2FBnjzloZ3UfQdcSaYfDvFEa7FkcH41ihXBmV4WUGC7QUYgpN5JnMBDkutKIClv%2BZiBsJoyrRLxBsFcybJS09kSb3WtV315QNotR1g5BmX2UTsFmVWgCagfMq7xWLvKnUdjeHTZ%2BDnYg9a4feC9Af1Oj4UXZsjZe9z%2F%2BZ3qZ99IVOgkfubyj8%2Bp33ckhWmpQvbUlt71zkrHASdidEDXsmfEMsMQ8Hd3lUj5ucLwS1iGaqxU5MLSxT0VM8rqf9qBTGafLQ7y1hojOe4qIwid2eFWyR07IB6OglefaWeW6ZtzI8iSWOSSVil7HEmhD%2BKnQoBc16U4olWLmig6PKO16M%2FCrTRZmQBSI88MNH%2FxgmRVEAdSf3QsYQlq9h8p9qeyZSTkRWi2pMjy9UaK%2FBoJ4UPfnNuP%2FkRs7SGwvWyo%2B5f42qljsxCQf9tzbIVnAVR5rJEOyKaUpps3rfyKg8v3E7Uz4HiUrpd6ltobV5jGgxP9ugIkazB%2BOlb9B3MVN1jB0SU2qvLZzPyoeN2aVp%2Fj8w%3D%3D";
+        window.__genspark_locale = "ko-KR";
+        window.__genspark_token = "To/BnjzloZ3UfQdcSaYfDvFEa7FkcH41ihXBmV4WUGC7QUYgpN5JnMBDkutKIClv+ZiBsJoyrRLxBsFcybJS09kSb3WtV315QNotR1g5BmX2UTsFmVWgCagfMq7xWLvKnUdjeHTZ+DnYg9a4feC9Af1Oj4UXZsjZe9z/+Z3qZ99IVOgkfubyj8+p33ckhWmpQvbUlt71zkrHASdidEDXsmfEMsMQ8Hd3lUj5ucLwS1iGaqxU5MLSxT0VM8rqf9qBTGafLQ7y1hojOe4qIwid2eFWyR07IB6OglefaWeW6ZtzI8iSWOSSVil7HEmhD+KnQoBc16U4olWLmig6PKO16M/CrTRZmQBSI88MNH/xgmRVEAdSf3QsYQlq9h8p9qeyZSTkRWi2pMjy9UaK/BoJ4UPfnNuP/kRs7SGwvWyo+5f42qljsxCQf9tzbIVnAVR5rJEOyKaUpps3rfyKg8v3E7Uz4HiUrpd6ltobV5jGgxP9ugIkazB+Olb9B3MVN1jB0SU2qvLZzPyoeN2aVp/j8w==";
+    </script>
+    
+        <script id="html_badge_script2" src="https://www.genspark.ai/html_badge.js"></script>
+        
+    <script id="html_notice_dialog_script" src="https://www.genspark.ai/notice_dialog.js"></script>
+    
